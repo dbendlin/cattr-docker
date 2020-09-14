@@ -1,0 +1,9 @@
+FROM mariadb:latest
+LABEL Author "Diego Bendlin <mailto:diego.bendlin@gmail.com>"
+ARG DB_ROOT_PASSWORD
+ENV MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+RUN apt -y update && apt -y upgrade && apt install -y apt-utils
+RUN apt install -y git nano nginx tzdata
+WORKDIR /usr/share/nginx
+RUN git clone --depth=1 -b v3.1.0 https://git.amazingcat.net/AmazingTime/core/cattr-backend.git
+CMD ["mysqld"]

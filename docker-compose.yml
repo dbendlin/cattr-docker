@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  cattr-web:
+    container_name: cattr
+    hostname: cattr
+    domainname: main.cast.com.py
+    build: 
+      context: .
+      dockerfile: Dockerfile.frontend-base
+    volumes: 
+      - cattr-frontend_src:/usr/share/nginx/cattr-frontend
+    depends_on: 
+      - cattr-php
+    ports:
+      - 80
+      - 443
+  cattr-db:
+    container_name: cattr-db
+    hostname: cattr-db
+    domainname: main.cast.com.py
+    build:
+      context: .
+      dockerfile: Dockerfile.backend-base
+    environment: 
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes: 
+      - cattr-backend_src:/usr/share/nginx/cattr-backend
+    depends_on: 
+      - cattr-php
+    ports:
+      - 80
+      - 443
+      - 3306
+  cattr-php:
+    image: php:7.4-fpm
+    volumes: 
+      - ./cattr-frontend_php-log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
+    ports: 
+      - 9000
+    
+volumes: 
+  cattr-frontend_src:
+  cattr-backend_src:

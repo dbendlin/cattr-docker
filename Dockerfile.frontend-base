@@ -1,0 +1,8 @@
+FROM nginx:1.19.2-alpine
+LABEL Author "Diego Bendlin <mailto:diego.bendlin@gmail.com>"
+RUN apk -U upgrade
+RUN apk add git nano tzdata
+COPY cattr-frontend.conf /etc/nginx/conf.d/default.conf
+WORKDIR /usr/share/nginx
+RUN git clone --depth=1 -b v3.1.0 https://git.amazingcat.net/AmazingTime/core/cattr-frontend.git
+CMD ["nginx", "-g", "daemon off;"]
